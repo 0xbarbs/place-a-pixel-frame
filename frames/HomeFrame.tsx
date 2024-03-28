@@ -58,8 +58,8 @@ export const HomeFrame = async (c: any) => {
       </div>
     ),
     intents: [
+      <Button action="/faq">FAQ ❓</Button>,
       <Button action="/canvas">🎨 View canvas</Button>,
-      <Button action="/faq">❓ FAQ</Button>
     ],
   });
 }
