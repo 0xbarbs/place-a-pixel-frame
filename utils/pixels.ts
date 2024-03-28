@@ -34,10 +34,10 @@ export const setAllPixelColors = async (color: ColorCode) => {
 
 export const getAllPixelColors = async (): Promise<string[]> => {
   let colors: string[] = [];
-  const canvas = await kv.get("pap:canvas");
+  const canvas = await kv.get("pap:canvas") as string;
   for (let i = 0; i < canvas.length; i++) {
     const code = canvas[i];
-    const color = CODE_COLORS[code];
+    const color = CODE_COLORS[code as ColorCode];
 
     if (!color) {
       console.warn("invalid color code detected: ", code);
@@ -62,8 +62,8 @@ const savePixelColors = async (colors: string[]) => {
   colors.forEach((color) => canvas += COLOR_CODES[color]);
   await kv.set("pap:canvas", canvas);
 
-  const paintCount = await kv.get("pap:count");
-  if (paintCount && paintCount > 0 && paintCount % 840) {
+  const paintCount = (await kv.get("pap:count") || 0) as number;
+  if (paintCount > 0 && paintCount % 840) {
     await kv.set(`pap:nft:${paintCount / 840}`, canvas);
   }
   await kv.incr("pap:count");

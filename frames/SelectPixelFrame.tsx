@@ -25,11 +25,11 @@ export const SelectPixelFrame = async (c: any) => {
     case (inputText && !selectedPixel):
       error = "The pixel coordinate you selected is not valid, input the X and Y coordinate separated by a comma";
       break;
-    case (selectedPixel?.x > PIXELS_X):
+    case (selectedPixel && selectedPixel.x > PIXELS_X):
       error = `Your X coordinate must be less than ${PIXELS_X}`;
       selectedPixel = null;
       break;
-    case (selectedPixel?.y > PIXELS_Y):
+    case (selectedPixel && selectedPixel.y > PIXELS_Y):
       error = `Your Y coordinate must be less than ${PIXELS_Y}`;
       selectedPixel = null;
       break;

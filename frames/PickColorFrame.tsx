@@ -8,6 +8,7 @@ import { SuccessFrame } from "@/frames/SuccessFrame";
 import { getInteractor } from "@/utils/neynar";
 import { kv } from "@vercel/kv";
 import { getUnixTimestamp } from "@/utils/date";
+import { ColorCode } from "@/types/canvas";
 
 export const PickColorFrame = async (c: any) => {
   const user = getInteractor(c);
@@ -76,7 +77,7 @@ export const PickColorFrame = async (c: any) => {
                   display: "flex",
                   width: 128,
                   height: 128,
-                  background: CODE_COLORS[code],
+                  background: CODE_COLORS[code as ColorCode],
                 }}
               />
 
