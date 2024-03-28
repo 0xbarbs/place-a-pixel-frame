@@ -1,6 +1,6 @@
 /** @jsxImportSource frog/jsx */
 import { Button, TextInput } from "frog";
-import { FRAME_HEIGHT, FRAME_WIDTH } from "@/constants";
+import { FRAME_HEIGHT, FRAME_WIDTH, PAINT_THROTTLE } from "@/constants";
 
 export const FaqFrame = async (c: any) => {
   return c.res({
@@ -44,7 +44,7 @@ export const FaqFrame = async (c: any) => {
             fontSize: 50,
           }}
         >
-          2️⃣ Each user can place 1 pixel every 15 seconds
+          2️⃣ Each user can place 1 pixel every {PAINT_THROTTLE} seconds
         </p>
         <p
           style={{

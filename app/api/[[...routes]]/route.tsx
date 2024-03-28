@@ -1,6 +1,7 @@
 /** @jsxImportSource frog/jsx */
 
 import { Frog } from 'frog'
+import { neynar as nnMiddleware } from "frog/middlewares";
 import { devtools } from 'frog/dev'
 import { handle } from 'frog/next'
 import { serveStatic } from 'frog/serve-static'
@@ -27,11 +28,16 @@ const app = new Frog({
   },
 })
 
+const neynarMiddleware = nnMiddleware({
+  apiKey: process.env.NEYNAR_API_KEY!,
+  features: ['interactor'],
+})
+
 app.frame("/", HomeFrame)
 app.frame("/faq", FaqFrame)
 app.frame("/canvas", CanvasFrame)
-app.frame("/select", SelectPixelFrame)
-app.frame("/color", PickColorFrame)
+app.frame("/select", neynarMiddleware, SelectPixelFrame)
+app.frame("/color", neynarMiddleware, PickColorFrame)
 
 devtools(app, { serveStatic })
 

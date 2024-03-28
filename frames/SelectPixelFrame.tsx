@@ -3,11 +3,23 @@ import { PixelGrid } from "@/components/PixelGrid";
 import { Button, TextInput } from "frog";
 import { coordinateToString, getAllPixelColors, parseCoordinate } from "@/utils/pixels";
 import { PIXELS_X, PIXELS_Y } from "@/constants";
+import { getInteractor } from "@/utils/neynar";
+import { ErrorFrame } from "@/frames/ErrorFrame";
+import { kv } from "@vercel/kv";
+import { Session } from "@/types/session";
+import { getCoolDownPeriod, isThrottled } from "@/utils/date";
 
 export const SelectPixelFrame = async (c: any) => {
   let error = null;
   const { inputText, buttonValue } = c;
   let selectedPixel = parseCoordinate(inputText);
+
+  const user = getInteractor(c);
+  if (!user) {
+    return ErrorFrame(c, "Failed to retrieve user, please try again");
+  }
+
+  const session = await kv.get<Session>(`pap:fid:${user.fid}`);
 
   switch (true) {
     case (inputText && !selectedPixel):
@@ -19,6 +31,10 @@ export const SelectPixelFrame = async (c: any) => {
       break;
     case (selectedPixel?.y > PIXELS_Y):
       error = `Your Y coordinate must be less than ${PIXELS_Y}`;
+      selectedPixel = null;
+      break;
+    case (session && isThrottled(session.updated)):
+      error = `You must wait ${getCoolDownPeriod(session!.updated)} seconds to paint another pixel`;
       selectedPixel = null;
       break;
   }

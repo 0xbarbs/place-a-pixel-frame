@@ -5,8 +5,16 @@ import { coordinateToString, isValidColorCode, parseCoordinate, setPixelColor } 
 import { ErrorFrame } from "@/frames/ErrorFrame";
 import { CanvasFrame } from "@/frames/CanvasFrame";
 import { SuccessFrame } from "@/frames/SuccessFrame";
+import { getInteractor } from "@/utils/neynar";
+import { kv } from "@vercel/kv";
+import { getUnixTimestamp } from "@/utils/date";
 
 export const PickColorFrame = async (c: any) => {
+  const user = getInteractor(c);
+  if (!user) {
+    return ErrorFrame(c, "Failed to retrieve user, please try again");
+  }
+
   const { inputText: colorCode, buttonValue: coord } = c;
   const position = parseCoordinate(coord);
   if (!position) {
@@ -14,6 +22,12 @@ export const PickColorFrame = async (c: any) => {
   }
   if (colorCode && isValidColorCode(colorCode.toUpperCase())) {
     await setPixelColor(position, colorCode.toUpperCase());
+    await kv.set(`pap:fid:${user.fid}`, {
+      fid: user.fid,
+      name: user.username,
+      avatar: user.pfpUrl,
+      updated: getUnixTimestamp(),
+    })
     return SuccessFrame(c);
   }
 
