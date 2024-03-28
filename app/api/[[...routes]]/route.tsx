@@ -1,6 +1,7 @@
 /** @jsxImportSource frog/jsx */
 
 import { Frog } from 'frog'
+import { neynar as nnHub } from "frog/hubs";
 import { neynar as nnMiddleware } from "frog/middlewares";
 import { devtools } from 'frog/dev'
 import { handle } from 'frog/next'
@@ -13,6 +14,7 @@ import { FaqFrame } from "@/frames/FaqFrame";
 import { PickColorFrame } from "@/frames/PickColorFrame";
 
 const app = new Frog({
+  hub: nnHub({apiKey: process.env.NEYNAR_API_KEY!}),
   assetsPath: "/",
   basePath: "/api",
   imageOptions: {
