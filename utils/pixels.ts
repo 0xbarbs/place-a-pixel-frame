@@ -61,4 +61,10 @@ const savePixelColors = async (colors: string[]) => {
   let canvas = "";
   colors.forEach((color) => canvas += COLOR_CODES[color]);
   await kv.set("pap:canvas", canvas);
+
+  const paintCount = await kv.get("pap:count");
+  if (paintCount && paintCount > 0 && paintCount % 840) {
+    await kv.set(`pap:nft:${paintCount / 840}`, canvas);
+  }
+  await kv.incr("pap:count");
 }
