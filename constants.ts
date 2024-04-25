@@ -1,6 +1,6 @@
 import { ColorCode } from "@/types/canvas";
 
-export const PAINT_THROTTLE = 15; // 15 seconds
+export const PAINT_THROTTLE = 5; // 15 seconds
 
 export const FRAME_WIDTH = 1200;
 export const FRAME_HEIGHT = 630;
